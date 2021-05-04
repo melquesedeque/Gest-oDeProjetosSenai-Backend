@@ -10,11 +10,16 @@ class ApiUserController extends Controller{
 
     public function listarUsuarios(){
         $todoUsuarios = User::orderBy('nome')->get();
-        return response()->json($todoUsuarios);
+        return response()->json(['result'=>$todoUsuarios]);
+    }
+
+    public function filtrarPorNome($nome){
+        $todoUsuarios = User::where('nome', 'like', '%'.$nome.'%')->orderBy('nome')->get();
+        return response()->json(['result'=>$todoUsuarios]);
     }
 
     public function registarUsuario(Request $requestUser){
-        
+
         //$competencias = implode(",", $requestUser->competencia);// Converter Array em String
 
         // Tratar CPF
@@ -31,7 +36,7 @@ class ApiUserController extends Controller{
 
         // Verifica se 'CPF' já foi cadastrado
         if(User::where('cpf',$requestUser->cpf)->exists()){
-            return response()->json("CPF já Cadastrado");
+            return response()->json(['error'=>"CPF já Cadastrado"]);
         }
 
         //Salvar os dados no banco
@@ -55,7 +60,7 @@ class ApiUserController extends Controller{
         try {
             if($verificarStatus->status === 'Não validado'){
                 User::where('id', $id)->update([
-                    'status' => 'Valido',
+                    'status' => 'Validado',
                 ]);
             }else{
                 User::where('id', $id)->update([
