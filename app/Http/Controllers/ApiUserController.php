@@ -20,8 +20,6 @@ class ApiUserController extends Controller{
 
     public function registarUsuario(Request $requestUser){
 
-        //$competencias = implode(",", $requestUser->competencia);// Converter Array em String
-
         // Tratar CPF
         $requestUser->cpf = str_replace('.', '', $requestUser->cpf);
         $requestUser->cpf = str_replace('-', '', $requestUser->cpf);
